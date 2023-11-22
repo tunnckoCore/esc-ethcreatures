@@ -1,6 +1,7 @@
 {
   "name": "ethcreatures",
   "type": "module",
+  "private": true,
   "peerDependencies": {
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
@@ -14,10 +15,11 @@
     "build": "vite build",
     "genfiles": "deno run -A --unstable ./build.mjs",
     "copyfiles": "cp server.mjs dist && cp -R files/ dist/",
-    "prepdeploy": "yarn build && yarn copyfiles && cp server.mjs dist && cp .gitignore dist",
+    "prepdeploy": "npm run build && npm run copyfiles && cp .gitignore dist",
     "denodeploy": "deployctl deploy --project ethcreatures --prod ./server.mjs",
     "dev": "vite",
-    "local": "deno run -A --unstable ./server.mjs"
+    "serve:local": "deno run -A --unstable ./server.mjs",
+    "serve:dist": "cd dist && deno run -A --unstable ./server.mjs"
   },
   "dependencies": {
     "p-map": "^6.0.0",

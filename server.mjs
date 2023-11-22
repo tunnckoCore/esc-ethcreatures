@@ -263,11 +263,12 @@ app.get("/genesis", async (c) => {
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <script src="https://cdn.tailwindcss.com"></script>
+      <title>${TITLE} collection</title>
     </head>
     <body>
       <div class="flex flex-col items-center justify-center bg-gray-100">
 
-        <h1 class="text-5xl font-extrabold text-center mt-10 mb-5">79 Genesis Ethcreatures</h1>
+        <h1 class="text-5xl font-extrabold text-center mt-10 mb-5">${TITLE}</h1>
         ${imagesGridHtml}
       </div>
     </body>
@@ -276,16 +277,16 @@ app.get("/genesis", async (c) => {
     { status: 200 }
   );
 });
+
 app.get("/auction", async (c) => {
   return c.html("<h1>Auction House</h1><p>Coming soon</p>", { status: 200 });
 });
 
-app.use("/delete-all", async (c) => {
-  for await (const entry of db.list({ prefix: [] })) {
-    await db.delete(entry.key);
-  }
-
-  return c.json({ deleted: true });
-});
+// app.use("/delete-all", async (c) => {
+//   for await (const entry of db.list({ prefix: [] })) {
+//     await db.delete(entry.key);
+//   }
+//   return c.json({ deleted: true });
+// });
 
 Deno.serve(app.fetch);

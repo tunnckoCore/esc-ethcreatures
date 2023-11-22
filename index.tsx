@@ -16,10 +16,19 @@ import {
 import { mainnet, goerli } from "viem/chains";
 import contract from "./contract";
 import { estimateCostFromSvg } from "./estimate.mjs";
+import {
+  TITLE,
+  LINKS,
+  DEV,
+  API_SERVER,
+  PARAGRAPH_TEXT,
+  MINT_PRICE,
+  PROJECT_OWNER_ADDRESS,
+  MINT_CONTRACT,
+  PAUSE,
+  PAUSE_MSG,
+} from "./config.mjs";
 import "viem/window";
-
-const DEV = false;
-const API_SERVER = DEV ? "http://localhost:8000" : "";
 
 const publicClient = createPublicClient({
   chain: DEV ? goerli : mainnet,
@@ -40,7 +49,7 @@ const estimateCost = async (setStateCallback, data) => {
 
 const truncate = (x) => x.slice(0, 5) + "…" + x.slice(x.length - 4);
 
-function Ethcreatures() {
+function App() {
   const [minting, setMinting] = useState<boolean>(false);
   const [item, setItem] = useState<any>({});
   const [account, setAccount] = useState<Address | null>();
@@ -90,14 +99,11 @@ function Ethcreatures() {
     // console.log(`data:image/svg+xml;base64,${btoa(item.svg)}`);
   };
 
-  const PAUSE = true;
   const sendTransaction = async () => {
-    // if (PAUSE) {
-    //   alert(
-    //     "Block 18140000 came and the mint has closed.\n\nWe will continue with a new contract and bigger mint window. The current supply is only 79 which is not enough for our plans."
-    //   );
-    //   return;
-    // }
+    if (PAUSE) {
+      alert(PAUSE_MSG);
+      return;
+    }
     if (!account) return;
 
     const token = await fetch(
@@ -119,10 +125,9 @@ function Ethcreatures() {
       functionName: "ethscribe",
       args: [`data:image/svg+xml;base64,${btoa(token.svg)}`],
       value:
-        account.toLowerCase() ===
-        "0xA20C07F94A127fD76E61fbeA1019cCe759225002".toLowerCase()
+        account.toLowerCase() === PROJECT_OWNER_ADDRESS.toLowerCase()
           ? parseEther("0")
-          : parseEther("0.001"),
+          : parseEther(MINT_PRICE),
     });
 
     setHash(hash);
@@ -189,10 +194,28 @@ function Layout({
 
   return (
     <div className="border rounded-md shadow bg-white/50 p-5 mt-5">
-      <h1 className="text-5xl font-extrabold underline">ESIP-3 Ethcreatures</h1>
+      <h1 className="text-5xl font-extrabold underline">{TITLE}</h1>
       <nav>
         <ul className="flex gap-2 mt-4">
-          <li>
+          {LINKS.map((x, idx) => {
+            const lastItem = idx === LINKS.length - 1;
+
+            return (
+              <>
+                <li key={idx}>
+                  <a
+                    {...x}
+                    href={x.href}
+                    className={x.className || "text-blue-500"}
+                  >
+                    {x.name}
+                  </a>
+                </li>
+                {lastItem ? null : <li>-</li>}
+              </>
+            );
+          })}
+          {/* <li>
             <a href="/genesis" className="text-blue-500">
               Genesis Collection
             </a>
@@ -212,20 +235,17 @@ function Layout({
             <a href="/auction" className="text-blue-500">
               Auction House (soon)
             </a>
-          </li>
+          </li> */}
         </ul>
       </nav>
       <div className="mt-4 flex flex-col gap-4">
-        <p>
-          Genesis mint was from block 18135687 to 18140000. The new mint phase
-          will begin at block 18144000 and will close at block 18160000.
-        </p>
-        <p>
+        <p>{PARAGRAPH_TEXT}</p>
+        {/* <p>
           Thus, as an open edition, the mint will be open for the next ~53
           hours. After that we will build the rarity system and ranking scores.
-        </p>
+        </p> */}
         <ul className="flex flex-col gap-2">
-          <li>
+          {/* <li>
             <strong>Genesis Contract:</strong>{" "}
             <a
               target="_blank"
@@ -234,19 +254,19 @@ function Layout({
             >
               {truncate("0x963469bffce4534f1e7ed7217f7fb3740acb21d9")}
             </a>
-          </li>
+          </li> */}
           <li>
             <strong>Minting Contract:</strong>{" "}
             <a
               target="_blank"
-              href="https://etherscan.io/address/0x3eb668ddb91973b10dfc0428daae605f90193589"
+              href={`https://etherscan.io/address/` + MINT_CONTRACT}
               className="text-blue-500"
             >
-              {truncate("0x3eb668ddb91973b10dfc0428daae605f90193589")}
+              {truncate(MINT_CONTRACT)}
             </a>
           </li>
           <li>
-            <strong>Mint Price:</strong> 0.001 ETH (~$1.6) + gas
+            <strong>Mint Price:</strong> {MINT_PRICE} ETH + gas
           </li>
           <li>
             <strong>Estimated Price:</strong> {(cost || estimatedCost).eth || 0}{" "}
@@ -311,5 +331,5 @@ function Layout({
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <Ethcreatures />
+  <App />
 );
