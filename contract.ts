@@ -1,5 +1,8 @@
+import { MINT_CONTRACT } from "./config.mjs";
+
+// Deploy similar contract to this one 0x3eb668ddb91973b10dfc0428daae605f90193589, then copy the ABI from Etherscan
 export default {
-  address: "0x3eb668ddb91973b10dfc0428daae605f90193589",
+  address: MINT_CONTRACT,
 
   abi: [
     { inputs: [], name: "MintClosed", type: "error" },

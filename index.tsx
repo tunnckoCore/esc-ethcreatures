@@ -12,6 +12,7 @@ import {
   stringify,
   toHex,
   formatEther,
+  fromBytes,
 } from "viem";
 import { mainnet, goerli } from "viem/chains";
 import contract from "./contract";
@@ -61,7 +62,10 @@ function App() {
   // const addressInput = React.createRef<HTMLInputElement>();
   // const valueInput = React.createRef<HTMLInputElement>();
   const estimate = () =>
-    estimateCost((x) => setEstimatedCost(x.cost), item.svg);
+    estimateCost(
+      (x) => setEstimatedCost(x.cost),
+      new TextDecoder().decode(item.bytes)
+    );
 
   useEffect(() => {
     if (mounted) return;
@@ -78,8 +82,15 @@ function App() {
   const handleReload = async () => {
     fetch(`${API_SERVER}/random?nomint=1&format=json`)
       .then((res) => res.json())
-      .then(({ data }) => setItem(data))
-      .then(() => estimate());
+      .then(({ data }) => {
+        if (data) {
+          setItem(data);
+          return true;
+        }
+
+        return false;
+      })
+      .then((x) => (x ? estimate() : null));
   };
 
   const handleConnect = async () => {
@@ -123,7 +134,7 @@ function App() {
       address,
       account,
       functionName: "ethscribe",
-      args: [`data:image/svg+xml;base64,${btoa(token.svg)}`],
+      args: [token.content_uri],
       value:
         account.toLowerCase() === PROJECT_OWNER_ADDRESS.toLowerCase()
           ? parseEther("0")
@@ -158,7 +169,7 @@ function App() {
       hash={hash}
       receipt={receipt}
       estimatedCost={estimatedCost}
-      data={item.svg}
+      data={item.bytes}
     >
       <button
         disabled={minting}
@@ -189,8 +200,13 @@ function Layout({
   estimatedCost,
   data,
 }) {
+  const [gasPrice, setGasPrice] = useState<any>(0);
   const [cost, setCost] = useState<any>(estimatedCost);
-  const estimate = () => estimateCost((x) => setCost(x.cost), data);
+  const estimate = () =>
+    estimateCost((x) => {
+      setCost(x.cost);
+      setGasPrice(x.gasPrice);
+    }, new TextDecoder().decode(data));
 
   return (
     <div className="border rounded-md shadow bg-white/50 p-5 mt-5">
@@ -266,7 +282,8 @@ function Layout({
             </a>
           </li>
           <li>
-            <strong>Mint Price:</strong> {MINT_PRICE} ETH + gas
+            <strong>Mint Price:</strong> {MINT_PRICE} ETH + gas fee{" "}
+            <span className="italic">(at {gasPrice} Gwei)</span>
           </li>
           <li>
             <strong>Estimated Price:</strong> {(cost || estimatedCost).eth || 0}{" "}
