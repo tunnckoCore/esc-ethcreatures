@@ -1,7 +1,6 @@
 import { toHex } from "viem";
 
 export async function getGasPrice(apiKey) {
-  // &apikey=${apiKey}
   try {
     return fetch(
       `https://api.etherscan.io/api?module=gastracker&action=gasoracle` +
@@ -66,15 +65,6 @@ export async function estimateCostFromSvg(data, options) {
   return estimateCost(toHex(data), options);
 }
 
-// console.log(
-//   await estimateCost(
-//     toHex(
-//       `data:text/html;base64,PCFkb2N0eXBlIGh0bWw+PGh0bWwgbGFuZz0iZW4iPjxoZWFkPjxtZXRhIGNoYXJzZXQ9IlVURi04Ii8+PG1ldGEgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRoLGluaXRpYWwtc2NhbGU9MSJuYW1lPSJ2aWV3cG9ydCIvPjx0aXRsZT5SZWN1cnNpdmUgMHhOZWtvPC90aXRsZT48L2hlYWQ+PGJvZHk+PGRpdiBpZD0ibmVrb1Jvb3QiPjwvZGl2PjxzY3JpcHQgdHlwZT0ibW9kdWxlIj5hc3luYyBmdW5jdGlvbiBpbXBvcnRFdGhzY3JpcHRpb24oaWQsIHR5cGUsIGluZm8sIGJhc2VVcmwgPSAiLyIpIHsgbGV0IHJlczsgY29uc3QgZmV0Y2hlciA9ICh1cmwsIF90eXBlKSA9PiBmZXRjaCh1cmwpLnRoZW4oKHgpID0+IHgub2sgPyB4W190eXBlXSgpIDogUHJvbWlzZS5yZWplY3QoImVycmZ0Y2giKSApOyBjb25zdCB1cmwgPSAoYXBpID0gYmFzZVVybCkgPT4gYXBpICsgImV0aHNjcmlwdGlvbnMvIisgaWQgKyAoaW5mbyA/ICIiIDogIi9kYXRhIik7IHRyeSB7IHJlcyA9IHR5cGUgPT0gImpzIiA/IGF3YWl0IGltcG9ydCh1cmwoKSkgOiBhd2FpdCBmZXRjaGVyKHVybCgpLCB0eXBlKTsgfSBjYXRjaCAoZSkgeyB0cnkgeyByZXMgPSB0eXBlID09ICJqcyIgPyBhd2FpdCBpbXBvcnQodXJsKGJhc2VVcmwgKyAiYXBpLyIpKSA6IGF3YWl0IGZldGNoZXIodXJsKGJhc2VVcmwgKyAiYXBpLyIpLCB0eXBlKTsgfSBjYXRjaCAoZXJyb3IpIHsgY29uc29sZS5sb2coImVyciIsIGVycm9yKTsgfSB9IHJldHVybiByZXM7IH0KICBjb25zdCBuZWtvTG9hZCA9IGF3YWl0IGltcG9ydEV0aHNjcmlwdGlvbigiMHhjNzU5MTQ2ZDg1ZTUyNGU0MmU1Njg0ZDNlMTJmNjE3ZTMxZmM4MjZmMDM3YzBkZTNkMDc3M2RmNzI5NWMxZGM1IiwianMiLG51bGwsImh0dHBzOi8vYXBpLmV0aHNjcmlwdGlvbnMuY29tL2FwaS8iKTsKICBhd2FpdCBuZWtvTG9hZC5kZWZhdWx0KGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIiNuZWtvUm9vdCIpLCB7aW1wb3J0RXRoc2NyaXB0aW9uLG11dGFudE5hbWU6IlJlY3Vyc2l2ZSAweE5la28iLG11dGFudDp0cnVlLHZhcmlhYmxlczogeyJjYXQiOiIjNTM4M2MzIiwiZXllcyI6IiM0ZmRmODQiLCJiZyI6IiMyZjAyMWUiLCJncm91bmQiOiJoc2woMzIyLjY2NjY2NjY2NjY2NjcsIDkxLjg0JSwgNy42OSUpIiwiY3Vyc29yIjoi8J+NjSJ9LHRyYWl0czogeyJjYXQiOiJBc3RybyBOYXV0aWNvIiwiZXllcyI6IldlaXJkIEdyZWVuIiwiYmciOiJWaWVubmEgUm9hc3QiLCJjdXJzb3IiOiJwaW5lYXBwbGUifSxhcGk6Imh0dHBzOi8vYXBpLmV0aHNjcmlwdGlvbnMuY29tL2FwaS8ifSk7Y29uc3QgY29tcHV0ZWRDc3MgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCIjbmVrb1Jvb3QiKS5xdWVyeVNlbGVjdG9yKCIjbmVrb19jb2xvcnMiKTtjb21wdXRlZENzcy50ZXh0Q29udGVudCA9IGNvbXB1dGVkQ3NzLnRleHRDb250ZW50LnJlcGxhY2UoImJvZHl7YmFja2dyb3VuZC1jb2xvcjp2YXIoLS1iZy1jb2xvcil9IiwiYm9keXt3aWR0aDoxMDB2dztoZWlnaHQ6MTAwdmg7YmFja2dyb3VuZDp2YXIoLS1iZy1jb2xvcik7fSIpPC9zY3JpcHQ+PC9ib2R5PjwvaHRtbD4=`
-//     ),
-//     { safe: false, gasPrice: 20, ethPrice: 1580 }
-//   )
-// );
-
 // 6kb cost = at 15 gas, 1620 eth = 9.5 usd
 // 6kb cost = at 25 gas, 1620 eth = 15 usd
 // 6kb cost = at 40 gas, 1620 eth = 24 usd
@@ -86,122 +76,10 @@ export async function estimateCostFromSvg(data, options) {
 // 17kb cost = at 15 gas, 1620 eth = 22 usd
 // 17kb cost = at 25 gas, 1620 eth = 37 usd
 // 17kb cost = at 40 gas, 1620 eth = 60 usd
+
 // console.log(
 //   await estimateCostFromSvg(await Deno.readTextFile("./files/102.svg"), {
 //     gasPrice: 40,
 //     ethPrice: 1620,
 //   })
 // );
-
-/*
-
-  // ALL METHODS/OPERATIONS WORK IN BULK too, just pass an array
-
-  data:application/vnd.cardinals.emerge+json,{"content":"<h1>hi wrld</h1>","mimetype":"text/html","id":"0x0_hash_of_og_txn"}
-    -> the `from` is set as `creator`,
-    -> the `to` is set as the `initialOwner` & `currentOwner`
-
-  data:application/vnd.cardinals.transfer+json {"from":"0xOwner","to":"0xReceiver","id":"0x0_hash_of_og_txn"}
-   (send that to 0x0/null address (0x0 is banned in metamask) or to the `from`)
-    -> from, to, id
-    -> the `from` must match the `currentOwner` of `id`
-    -> the "creator" of the transaction must match the `from` and `currentOwner`
-    -> the "to" of the transaction must be the 0x00000 address, OR the `from` & `currentOwner`, eg. sent to self
-    -> the indexer must check if it is not marked "for sale", if so IGNORE
-
-  data:application/vnd.cardinals.trade.sell+json,{"price":"0.1","from":"0xSeller","id":"0x0_hash_of_og_txn"}
-    -> the creator of the "sell" transaction must match the `currentOwner` of the `id`, AND the passed `from`
-    -> the indexer must check if it is marked "for sale", if so update the price
-    -> OTHERWISE the indexer marks the `id` for sale, with the passed `price` and `from` address
-
-  data:application/vnd.cardinals.trade.buy+json,{"from":"0xBuyer","to":"0xSeller","id":"0x0_hash_of_og_txn"}
-    -> the creator of the "buy" transaction must match the passed `from`,
-    -> the passed `id` must be already marked for sale thru "sell" transaction
-    -> the passed `to` must be `currentOwner` of that `id`
-    -> the value for the "buy" txn must be equal to the price of the "sell"
-
-  data:application/vnd.cardinals.trade.cancel+json,{"id":"0x0_hash_of_og_txn"}
-    -> the creator of the "cancel" transaction must match the `currentOwner` of the `id`
-    -> the indexer must check if it is marked "for sale", if so remove the "for sale" mark, otherwise IGNORE
-
-
-
-  Scenario 1: Creator A wants to transfer to User B, by itself
-    -> Creator A creates a "transfer" transaction: {from: A, to: B, id: 0x0_hash_of_og_txn}
-    -> the indexer/api checks if the `from` matches the `currentOwner` of the `id`, if YES -> VALID transfer, otherwise IGNORE
-    -> the indexer updates the state of `id`, making B the `currentOwner` and A the `previousOwner`
-
-  Scenario 2: Creator A wants to sell to a User
-    -> Creator A creates an "sell" transaction: {"price":"0.1","from":"0xSeller","id":"0x0_hash_of_og_txn"}
-    -> the indexer checks the creator of the transaction is the `currentOwner` of the passed `id`, if YES -> VALID, otherwise IGNORE
-
-    -> Then when someone wants to buy that `id`, they create a "buy" transaction: {"from":"0xBuyer","to":"0xSeller","id":"0x0_hash_of_og_txn"},
-       and send the asked price as transaction value
-    -> then the indexer checks the creator of the "buy" transaction is not owner of the `id`,
-        and the value of the transaction is equal to the price of the "sell"
-
-
-
-
-
-    -> OR the `from` must be the allowed `nonOwnerAddress` of an "approvedTransfer" transaction which creator must be `currentOwner`,
-      thus this allows someone else to "transfer" the users cardinal on user behalf
-
-  data:application/vnd.cardinals.approvedTransfer+json
-    -> from - nonOwnerAddress, to, id
-    -> the creator of this transaction must match the `currentOwner` of the `id`
-    -> this allows the `nonOwnerAddress` to create a valid "transfer" transaction
-    -> the indexer must check if it is marked "for sale", if so IGNORE
-
-
-
-  DUNE request : curl -X GET "https://api.dune.com/api/v1/query/3028417/results" -H x-dune-api-key:i6UySm7VuICAlrcRL6clEhwxMlcPRFuR
-  DUNE response: {
-  "execution_id": "01HAJ07YGMBKZ0PJVZ6G13T80D",
-  "query_id": 3028417,
-  "state": "QUERY_STATE_COMPLETED",
-  "submitted_at": "2023-09-17T16:40:38.674743Z",
-  "expires_at": "2023-12-16T16:41:17.450169Z",
-  "execution_started_at": "2023-09-17T16:40:38.697319Z",
-  "execution_ended_at": "2023-09-17T16:41:17.450168Z",
-  "result": {
-    "rows": [
-      {
-        "block_time": 9711907,
-        "content": "data:application/vnd.cardinals.transfer+json,{\"id\":\"0xf126d7cf1308f00da53d252e875f44467239419b21a9efd5f5c1a4cbd7fefb6e\",\"from\":\"0xA20C07F94A127fD76E61fbeA1019cCe759225002\",\"to\":\"0x3e7a28d96f19b65676F4309531418a03039Ee5b5\"}",
-        "creator": "0xa20c07f94a127fd76e61fbea1019cce759225002",
-        "data": "0x646174613a6170706c69636174696f6e2f766e642e63617264696e616c732e7472616e736665722b6a736f6e2c7b226964223a22307866313236643763663133303866303064613533643235326538373566343434363732333934313962323161396566643566356331613463626437666566623665222c2266726f6d223a22307841323043303746393441313237664437364536316662654131303139634365373539323235303032222c22746f223a22307833653761323864393666313962363536373646343330393533313431386130333033394565356235227d",
-        "owner": "0xa20c07f94a127fd76e61fbea1019cce759225002",
-        "tx_hash": "0x17551fdcde684d7f701b79404e032ac24b88205907bf4f00acf670f58d3880ec",
-        "tx_index": 34
-      },
-      {
-        "block_time": 9711890,
-        "content": "data:application/vnd.cardinals.emerge+json,{\"id\":\"0xf126d7cf1308f00da53d252e875f44467239419b21a9efd5f5c1a4cbd7fefb6e\",\"content\":\"\u003ch1\u003eCardinals Hello World\u003c/h1\u003e\",\"mimetype\":\"text/html\",\"isBase64\":false}",
-        "creator": "0xa20c07f94a127fd76e61fbea1019cce759225002",
-        "data": "0x646174613a6170706c69636174696f6e2f766e642e63617264696e616c732e656d657267652b6a736f6e2c7b226964223a22307866313236643763663133303866303064613533643235326538373566343434363732333934313962323161396566643566356331613463626437666566623665222c22636f6e74656e74223a223c68313e43617264696e616c732048656c6c6f20576f726c643c2f68313e222c226d696d6574797065223a22746578742f68746d6c222c226973426173653634223a66616c73657d",
-        "owner": "0xa20c07f94a127fd76e61fbea1019cce759225002",
-        "tx_hash": "0x6dd08602e87f9ab996f6f1f03b3c8b63397f941a670eaa34a6463ccedca808ea",
-        "tx_index": 20
-      }
-    ],
-    "metadata": {
-      "column_names": [
-        "block_time",
-        "creator",
-        "owner",
-        "tx_hash",
-        "tx_index",
-        "data",
-        "content"
-      ],
-      "result_set_bytes": 1705,
-      "total_row_count": 2,
-      "datapoint_count": 18,
-      "pending_time_millis": 22,
-      "execution_time_millis": 38752
-    }
-  }
-}
-
-*/
