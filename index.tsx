@@ -12,7 +12,6 @@ import {
   stringify,
   toHex,
   formatEther,
-  fromBytes,
 } from "viem";
 import { mainnet, goerli } from "viem/chains";
 import contract from "./contract";
@@ -29,6 +28,7 @@ import {
   PAUSE,
   PAUSE_MSG,
 } from "./config.mjs";
+
 import "viem/window";
 
 const publicClient = createPublicClient({
@@ -59,13 +59,8 @@ function App() {
   const [estimatedCost, setEstimatedCost] = useState<number>(0);
   const [mounted, setMounted] = useState<boolean>(false);
 
-  // const addressInput = React.createRef<HTMLInputElement>();
-  // const valueInput = React.createRef<HTMLInputElement>();
-  const estimate = () =>
-    estimateCost(
-      (x) => setEstimatedCost(x.cost),
-      new TextDecoder().decode(item.bytes)
-    );
+  // const estimate = () =>
+  //   estimateCost((x) => setEstimatedCost(x.cost), item.content_uri);
 
   useEffect(() => {
     if (mounted) return;
@@ -73,9 +68,9 @@ function App() {
     setMounted(true);
 
     // initial
-    estimate();
+    // estimate();
 
-    handleReload();
+    // handleReload();
     handleConnect();
   }, [mounted]);
 
@@ -85,12 +80,13 @@ function App() {
       .then(({ data }) => {
         if (data) {
           setItem(data);
+          console.log("ZZZZZZ");
           return true;
         }
 
         return false;
-      })
-      .then((x) => (x ? estimate() : null));
+      });
+    // .then((x) => (x ? estimate() : null));
   };
 
   const handleConnect = async () => {
@@ -138,7 +134,7 @@ function App() {
       value:
         account.toLowerCase() === PROJECT_OWNER_ADDRESS.toLowerCase()
           ? parseEther("0")
-          : parseEther(MINT_PRICE),
+          : parseEther(String(MINT_PRICE)),
     });
 
     setHash(hash);
@@ -169,7 +165,7 @@ function App() {
       hash={hash}
       receipt={receipt}
       estimatedCost={estimatedCost}
-      data={item.bytes}
+      data={item.content_uri}
     >
       <button
         disabled={minting}
@@ -206,7 +202,7 @@ function Layout({
     estimateCost((x) => {
       setCost(x.cost);
       setGasPrice(x.gasPrice);
-    }, new TextDecoder().decode(data));
+    }, data);
 
   return (
     <div className="border rounded-md shadow bg-white/50 p-5 mt-5">
@@ -275,7 +271,10 @@ function Layout({
             <strong>Minting Contract:</strong>{" "}
             <a
               target="_blank"
-              href={`https://etherscan.io/address/` + MINT_CONTRACT}
+              href={
+                `https://${DEV ? "goerli." : ""}etherscan.io/address/` +
+                MINT_CONTRACT
+              }
               className="text-blue-500"
             >
               {truncate(MINT_CONTRACT)}

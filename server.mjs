@@ -3,7 +3,6 @@ import * as base64 from "https://deno.land/std@0.207.0/encoding/base64.ts";
 import { Hono } from "https://deno.land/x/hono/mod.ts";
 import { compress, serveStatic } from "https://deno.land/x/hono/middleware.ts";
 import pMap from "https://esm.sh/p-map";
-import { fromBytes } from "viem";
 
 const app = new Hono();
 const db = await Deno.openKv();
@@ -56,14 +55,14 @@ function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-async function randomHash() {
-  return (
-    await sha256(
-      String(Date.now() * Math.floor(Date.now() / 1_550_000)),
-      "SHA-1"
-    )
-  ).slice(15, 25);
-}
+// async function randomHash() {
+//   return (
+//     await sha256(
+//       String(Date.now() * Math.floor(Date.now() / 1_550_000)),
+//       "SHA-1"
+//     )
+//   ).slice(15, 25);
+// }
 
 async function sha256(msg, algo) {
   const hashBuffer = await crypto.subtle.digest(
@@ -80,7 +79,6 @@ async function sha256(msg, algo) {
 }
 
 async function getAllFiles() {
-  console.log("call");
   const files = [];
   const extmap = {
     svg: "image/svg+xml",
@@ -141,9 +139,22 @@ app.get("/random", async (c) => {
 
   console.log(item);
 
-  const resp = await fetch(
-    "https://api.ethscriptions.com/api/ethscriptions/exists/" + item.sha
-  ).then((x) => x.json());
+  let resp = null;
+
+  try {
+    resp = await fetch(
+      "https://api.ethscriptions.com/api/ethscriptions/exists/" + item.sha
+    ).then((x) => x.json());
+  } catch (error) {
+    return c.json({ error: error.message }, { status: 500 });
+  }
+
+  if (!resp) {
+    return c.json(
+      { error: "Failed to check if already minted" },
+      { status: 500 }
+    );
+  }
 
   if (resp.result) {
     return format === item.ext
@@ -158,7 +169,7 @@ app.get("/random", async (c) => {
   return format === item.ext
     ? new Response(
         // todo: better handling
-        item.ext === "svg" ? fromBytes(item.bytes, "string") : item.bytes,
+        format === "svg" ? new TextDecoder().decode(item.bytes) : item.bytes,
         {
           headers: { "content-type": item.type },
           status: 200,

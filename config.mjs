@@ -11,7 +11,7 @@ export const PAUSE_MSG = "Minting is paused.";
 export const LINKS = [
   {
     name: "Collection",
-    href: "/genesis",
+    href: "/collection",
   },
   {
     name: "Twitter",
